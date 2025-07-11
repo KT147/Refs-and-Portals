@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import ResultModal from "./ResultModal";
 
 // let timer;
 // ei toimi, sest kui on erinevad komponendid, siis teise komponendi nupule vajutades
@@ -7,6 +8,7 @@ import { useRef, useState } from "react";
 function TimerChallange({ title, targetTime }) {
 
     const timer = useRef()
+    const dialog = useRef()
 
     const [timerExpired, setTimerExpired] = useState(false);
     const [timerStarted, setTimerStarted] = useState(false);
@@ -15,6 +17,7 @@ function TimerChallange({ title, targetTime }) {
     const handleStart = () => {
         timer.current = setTimeout(() => {
             setTimerExpired(true)
+            dialog.current.showModal()
         }, targetTime * 1000);
 
         setTimerStarted(true);
@@ -26,10 +29,10 @@ function TimerChallange({ title, targetTime }) {
 
 
 
-  return (
+  return (<>
+  <ResultModal ref={dialog} targetTime={targetTime} result="lost" />
     <section className="challenge">
         <h2>{title}</h2>
-        {timerExpired && <p>You lost!</p>}
         <p className="challenge-time">
             {targetTime} second{targetTime > 1 ? "s" : ""}
         </p>
@@ -42,6 +45,7 @@ function TimerChallange({ title, targetTime }) {
             {timerStarted ? "Time is running..." : "Timer inactive"}
         </p>
     </section>
+    </>
   )
 }
 
